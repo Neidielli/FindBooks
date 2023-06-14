@@ -20,4 +20,8 @@ Usar os princípios, técnicas, ferramentas e padrões de arquitetura de softwar
 * Gerenciamento de projeto: ;
 * Frameworks: ;
 
+# 🚨 Restrições e Limitações:
+
+* Armazenamento dos dados em memória
+
 # ⚙️ Execução:
