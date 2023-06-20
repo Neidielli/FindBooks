@@ -1,12 +1,11 @@
-import React from 'react';
+// import React from 'react';
 
-const ItemPedido = () => {
-  return (
-    <div>
-      <h1>Detalhes do ItemPedido</h1>
-      {/* código JSX para exibir os detalhes do ItemPedido */}
-    </div>
-  );
-};
+class ItemPedido {
+  constructor(id, produto, qtdProduto) {
+    this.id = id;
+    this.produto = produto; // pegar do produto
+    this.qtdProduto = qtdProduto; // Pegar do produto
+  }
+}
 
-export default ItemPedido;
+module.exports = ItemPedido;
