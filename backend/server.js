@@ -3,6 +3,9 @@ const { LocalStorage } = require('node-localstorage');
 const app = express();
 const port = 3000;
 
+const Pedido = require('../Model/pedido');
+const Produto = require('../Model/Produto.js');
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -23,7 +26,8 @@ app.get('/produtos', (req, res) => {
 
 // Rota para adicionar um novo pedido
 app.post('/pedidos', (req, res) => {
-  const pedido = req.body;
+  const pedidoData = req.body;
+  const pedido = new Pedido(pedidoData.id, pedidoData.cliente, pedidoData.produto, pedidoData.quantidade);
   pedido.id = pedidos.length + 1;
   pedidos.push(pedido);
   localStorage.setItem('pedidos', JSON.stringify(pedidos));
@@ -36,9 +40,12 @@ app.put('/pedidos/:id', (req, res) => {
   const pedidoAtualizado = req.body;
   const pedidoIndex = pedidos.findIndex((pedido) => pedido.id === pedidoId);
   if (pedidoIndex !== -1) {
-    pedidos[pedidoIndex] = { ...pedidos[pedidoIndex], ...pedidoAtualizado };
+    const pedido = pedidos[pedidoIndex];
+    pedido.cliente = pedidoAtualizado.cliente || pedido.cliente;
+    pedido.produto = pedidoAtualizado.produto || pedido.produto;
+    pedido.quantidade = pedidoAtualizado.quantidade || pedido.quantidade;
     localStorage.setItem('pedidos', JSON.stringify(pedidos));
-    res.status(200).json(pedidos[pedidoIndex]);
+    res.status(200).json(pedido);
   } else {
     res.status(404).json({ message: 'Pedido não encontrado' });
   }
@@ -47,14 +54,20 @@ app.put('/pedidos/:id', (req, res) => {
 // Rota para excluir um pedido existente
 app.delete('/pedidos/:id', (req, res) => {
   const pedidoId = parseInt(req.params.id);
-  pedidos = pedidos.filter((pedido) => pedido.id !== pedidoId);
-  localStorage.setItem('pedidos', JSON.stringify(pedidos));
-  res.status(200).json({ message: 'Pedido excluído com sucesso' });
+  const pedidoIndex = pedidos.findIndex((pedido) => pedido.id === pedidoId);
+  if (pedidoIndex !== -1) {
+    pedidos.splice(pedidoIndex, 1);
+    localStorage.setItem('pedidos', JSON.stringify(pedidos));
+    res.status(200).json({ message: 'Pedido excluído com sucesso' });
+  } else {
+    res.status(404).json({ message: 'Pedido não encontrado' });
+  }
 });
 
 // Rota para adicionar um novo produto
 app.post('/produtos', (req, res) => {
-  const produto = req.body;
+  const produtoData = req.body;
+  const produto = new Produto(produtoData.id, produtoData.titulo, produtoData.genero, produtoData.autor, produtoData.preco);
   produto.id = produtos.length + 1;
   produtos.push(produto);
   localStorage.setItem('produtos', JSON.stringify(produtos));
@@ -67,9 +80,13 @@ app.put('/produtos/:id', (req, res) => {
   const produtoAtualizado = req.body;
   const produtoIndex = produtos.findIndex((produto) => produto.id === produtoId);
   if (produtoIndex !== -1) {
-    produtos[produtoIndex] = { ...produtos[produtoIndex], ...produtoAtualizado };
+    const produto = produtos[produtoIndex];
+    produto.titulo = produtoAtualizado.titulo || produto.titulo;
+    produto.genero = produtoAtualizado.genero || produto.genero;
+    produto.autor = produtoAtualizado.autor || produto.autor;
+    produto.preco = produtoAtualizado.preco || produto.preco;
     localStorage.setItem('produtos', JSON.stringify(produtos));
-    res.status(200).json(produtos[produtoIndex]);
+    res.status(200).json(produto);
   } else {
     res.status(404).json({ message: 'Produto não encontrado' });
   }
@@ -78,14 +95,17 @@ app.put('/produtos/:id', (req, res) => {
 // Rota para excluir um produto existente
 app.delete('/produtos/:id', (req, res) => {
   const produtoId = parseInt(req.params.id);
-  produtos = produtos.filter((produto) => produto.id !== produtoId);
-  localStorage.setItem('produtos', JSON.stringify(produtos));
-  res.status(200).json({ message: 'Produto excluído com sucesso' });
+  const produtoIndex = produtos.findIndex((produto) => produto.id === produtoId);
+  if (produtoIndex !== -1) {
+    produtos.splice(produtoIndex, 1);
+    localStorage.setItem('produtos', JSON.stringify(produtos));
+    res.status(200).json({ message: 'Produto excluído com sucesso' });
+  } else {
+    res.status(404).json({ message: 'Produto não encontrado' });
+  }
 });
 
 
 app.listen(port, () => {
   console.log(`Servidor backend rodando em http://localhost:${port}`);
 });
-
-
