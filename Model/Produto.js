@@ -1,12 +1,13 @@
-import React from 'react';
+// import React from 'react';
 
-const Produto = () => {
-  return (
-    <div>
-      <h1>Detalhes do Produto</h1>
-      {/* código JSX para exibir os detalhes do Produto */}
-    </div>
-  );
-};
+class Produto {
+  constructor(id, titulo, genero, autor, preco) {
+    this.id = id;
+    this.titulo = titulo;
+    this.genero = genero;
+    this.autor = autor;
+    this.preco = preco;
+  }
+}
 
-export default Produto;
+module.exports = Produto;
