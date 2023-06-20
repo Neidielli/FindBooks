@@ -19,7 +19,7 @@ app.get('/pedidos', (req, res) => {
   res.json(pedidos);
 });
 
-// Rota para obter todos os produtos
+// Rota para obter todos os produtos - LISTAR
 app.get('/produtos', (req, res) => {
   res.json(produtos);
 });
@@ -61,47 +61,6 @@ app.delete('/pedidos/:id', (req, res) => {
     res.status(200).json({ message: 'Pedido excluído com sucesso' });
   } else {
     res.status(404).json({ message: 'Pedido não encontrado' });
-  }
-});
-
-// Rota para adicionar um novo produto
-app.post('/produtos', (req, res) => {
-  const produtoData = req.body;
-  const produto = new Produto(produtoData.id, produtoData.titulo, produtoData.genero, produtoData.autor, produtoData.preco);
-  produto.id = produtos.length + 1;
-  produtos.push(produto);
-  localStorage.setItem('produtos', JSON.stringify(produtos));
-  res.status(201).json(produto);
-});
-
-// Rota para atualizar um produto existente
-app.put('/produtos/:id', (req, res) => {
-  const produtoId = parseInt(req.params.id);
-  const produtoAtualizado = req.body;
-  const produtoIndex = produtos.findIndex((produto) => produto.id === produtoId);
-  if (produtoIndex !== -1) {
-    const produto = produtos[produtoIndex];
-    produto.titulo = produtoAtualizado.titulo || produto.titulo;
-    produto.genero = produtoAtualizado.genero || produto.genero;
-    produto.autor = produtoAtualizado.autor || produto.autor;
-    produto.preco = produtoAtualizado.preco || produto.preco;
-    localStorage.setItem('produtos', JSON.stringify(produtos));
-    res.status(200).json(produto);
-  } else {
-    res.status(404).json({ message: 'Produto não encontrado' });
-  }
-});
-
-// Rota para excluir um produto existente
-app.delete('/produtos/:id', (req, res) => {
-  const produtoId = parseInt(req.params.id);
-  const produtoIndex = produtos.findIndex((produto) => produto.id === produtoId);
-  if (produtoIndex !== -1) {
-    produtos.splice(produtoIndex, 1);
-    localStorage.setItem('produtos', JSON.stringify(produtos));
-    res.status(200).json({ message: 'Produto excluído com sucesso' });
-  } else {
-    res.status(404).json({ message: 'Produto não encontrado' });
   }
 });
 
