@@ -1,12 +1,13 @@
-import React from 'react';
+// import React from 'react';
 
-const Pedido = () => {
-  return (
-    <div>
-      <h1>Detalhes do Pedido</h1>
-      {/* código JSX para exibir os detalhes do Pedido */}
-    </div>
-  );
-};
+class Pedido {
+  constructor(id, cliente, itemPedido, statusPedido, valorTotal) {
+    this.id = id;
+    this.cliente = cliente; // pegar do cliente
+    this.itemPedido = itemPedido; // é um vetor de produto
+    this.statusPedido = statusPedido; // processar no back
+    this.valorTotal = valorTotal; // Processar no back
+  }
+}
 
-export default Pedido;
+module.exports = Pedido;
